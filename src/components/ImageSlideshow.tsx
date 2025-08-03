@@ -50,6 +50,22 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
     };
   }, [isPlaying, images.length, interval]);
 
+  // Function to check if an image is landscape
+  const isLandscapeImage = (url: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        // Consider landscape if width >= height (aspect ratio >= 1)
+        resolve(img.width >= img.height);
+      };
+      img.onerror = () => {
+        // If image fails to load, assume it's landscape to avoid blocking
+        resolve(true);
+      };
+      img.src = url;
+    });
+  };
+
   const loadImages = async () => {
     try {
       setLoading(true);
@@ -69,7 +85,17 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         return dateB.getTime() - dateA.getTime();
       });
 
-      setImages(loadedImages);
+      // Filter for landscape images only
+      const landscapeImages: Image[] = [];
+      for (const image of loadedImages) {
+        const isLandscape = await isLandscapeImage(image.url);
+        if (isLandscape) {
+          landscapeImages.push(image);
+        }
+      }
+
+      console.log(`📸 Slideshow: Found ${landscapeImages.length} landscape images out of ${loadedImages.length} total images`);
+      setImages(landscapeImages);
     } catch (error) {
       console.error('Error loading images for slideshow:', error);
     } finally {
@@ -113,7 +139,8 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <p className="text-gray-600">No images available yet</p>
+          <p className="text-gray-600">No landscape images available for slideshow</p>
+          <p className="text-gray-500 text-sm mt-2">Only landscape images are displayed here for optimal viewing</p>
         </div>
       </div>
     );
