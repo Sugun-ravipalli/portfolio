@@ -50,20 +50,29 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
     };
   }, [isPlaying, images.length, interval]);
 
-  // Function to check if an image is landscape with very strict criteria
+  // Function to check if an image is landscape with timeout and better performance
   const isLandscapeImage = (url: string): Promise<boolean> => {
     return new Promise((resolve) => {
       const img = new Image();
+      const timeout = setTimeout(() => {
+        console.log(`Timeout for image: ${url}`);
+        resolve(false);
+      }, 5000); // 5 second timeout
+
       img.onload = () => {
-        // Very strict landscape detection: width should be at least 1.5x height to exclude portrait/square images
+        clearTimeout(timeout);
         const aspectRatio = img.width / img.height;
-        console.log(`Image aspect ratio: ${aspectRatio.toFixed(2)} (${img.width}x${img.height})`);
-        resolve(aspectRatio >= 1.5);
+        const isLandscape = aspectRatio >= 1.5;
+        console.log(`Image aspect ratio: ${aspectRatio.toFixed(2)} (${img.width}x${img.height}) - ${isLandscape ? 'Landscape' : 'Portrait'}`);
+        resolve(isLandscape);
       };
+      
       img.onerror = () => {
-        // If image fails to load, assume it's not landscape to avoid showing bad images
+        clearTimeout(timeout);
+        console.log(`Failed to load image: ${url}`);
         resolve(false);
       };
+      
       img.src = url;
     });
   };
@@ -71,6 +80,8 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
   const loadImages = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Starting to load images for slideshow...');
+      
       const imagesRef = collection(db, 'images');
       const q = query(imagesRef);
       const snapshot = await getDocs(q);
@@ -80,14 +91,20 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         ...doc.data()
       })) as Image[];
 
-      // Filter for landscape images only
-      const landscapeImages: Image[] = [];
-      for (const image of loadedImages) {
+      console.log(`📥 Loaded ${loadedImages.length} images from database, checking aspect ratios...`);
+
+      // Check all images in parallel for much faster loading
+      const aspectRatioPromises = loadedImages.map(async (image) => {
         const isLandscape = await isLandscapeImage(image.url);
-        if (isLandscape) {
-          landscapeImages.push(image);
-        }
-      }
+        return { image, isLandscape };
+      });
+
+      const results = await Promise.all(aspectRatioPromises);
+      const landscapeImages = results
+        .filter(result => result.isLandscape)
+        .map(result => result.image);
+
+      console.log(`✅ Found ${landscapeImages.length} landscape images out of ${loadedImages.length} total`);
 
       // Shuffle images in truly random order using Fisher-Yates algorithm
       const shuffledImages = [...landscapeImages];
@@ -96,7 +113,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         [shuffledImages[i], shuffledImages[j]] = [shuffledImages[j], shuffledImages[i]];
       }
 
-      console.log(`📸 Slideshow: Found ${shuffledImages.length} wide landscape images out of ${loadedImages.length} total images (displayed in random order)`);
+      console.log(`🎯 Slideshow ready with ${shuffledImages.length} images in random order`);
       setImages(shuffledImages);
     } catch (error) {
       console.error('Error loading images for slideshow:', error);
@@ -126,7 +143,8 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
       <div className={`relative w-full h-96 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center ${className}`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading beautiful moments...</p>
+          <p className="text-gray-600 font-medium">Loading slideshow...</p>
+          <p className="text-gray-500 text-sm mt-2">Checking image dimensions for optimal display</p>
         </div>
       </div>
     );
