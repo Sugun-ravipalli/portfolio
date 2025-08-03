@@ -168,12 +168,12 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
-      {/* Close button */}
+      {/* Close button - Mobile Optimized */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+        className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 p-1 sm:p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
       >
-        <X className="h-6 w-6" />
+        <X className="h-5 w-5 sm:h-6 sm:w-6" />
       </button>
 
       {/* Navigation arrows */}
@@ -182,23 +182,23 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
           <button
             onClick={() => onNavigate?.(currentIndex - 1)}
             disabled={currentIndex === 0}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-10 p-2 sm:p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={() => onNavigate?.(currentIndex + 1)}
             disabled={currentIndex === images.length - 1}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-10 p-2 sm:p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
         </>
       )}
 
       {/* Image container - Auto-fit to screen */}
       <div 
-        className="relative flex-1 flex items-center justify-center p-8 overflow-hidden"
+        className="relative flex-1 flex items-center justify-center p-4 sm:p-8 overflow-hidden"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -207,7 +207,7 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
         <img
           src={image.url}
           alt={image.title}
-          className="max-w-[95vw] max-h-[90vh] w-auto h-auto object-contain transition-transform duration-200"
+          className="max-w-[98vw] sm:max-w-[95vw] max-h-[85vh] sm:max-h-[90vh] w-auto h-auto object-contain transition-transform duration-200"
           style={{
             transform: `scale(${scale}) rotate(${rotation}deg) translate(${position.x}px, ${position.y}px)`,
             cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
@@ -215,77 +215,77 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
         />
       </div>
 
-      {/* Controls toolbar */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 flex items-center space-x-2 bg-black bg-opacity-50 rounded-full px-4 py-2">
+      {/* Controls toolbar - Mobile Optimized */}
+      <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 z-10 flex items-center space-x-1 sm:space-x-2 bg-black bg-opacity-50 rounded-full px-2 sm:px-4 py-1 sm:py-2">
         <button
           onClick={handleZoomOut}
-          className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+          className="p-1 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
           title="Zoom Out (Ctrl + -)"
         >
-          <ZoomOut className="h-5 w-5" />
+          <ZoomOut className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         
-        <span className="text-white text-sm px-2">
+        <span className="text-white text-xs sm:text-sm px-1 sm:px-2">
           {Math.round(scale * 100)}%
         </span>
         
         <button
           onClick={handleZoomIn}
-          className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+          className="p-1 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
           title="Zoom In (Ctrl + +)"
         >
-          <ZoomIn className="h-5 w-5" />
+          <ZoomIn className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         
         <button
           onClick={handleRotate}
-          className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+          className="p-1 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
           title="Rotate"
         >
-          <RotateCw className="h-5 w-5" />
+          <RotateCw className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         
         <button
           onClick={handleReset}
-          className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+          className="p-1 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
           title="Reset (0)"
         >
-          <span className="text-sm font-bold">0</span>
+          <span className="text-xs sm:text-sm font-bold">0</span>
         </button>
       </div>
 
-      {/* Action buttons */}
-      <div className="absolute top-4 left-4 z-10 flex items-center space-x-2">
+      {/* Action buttons - Mobile Optimized */}
+      <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10 flex items-center space-x-1 sm:space-x-2">
         <button
           onClick={handleDownload}
-          className="p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+          className="p-1 sm:p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
           title="Download"
         >
-          <Download className="h-5 w-5" />
+          <Download className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         
         <button
           onClick={handleShare}
-          className="p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+          className="p-1 sm:p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
           title="Share"
         >
-          <Share2 className="h-5 w-5" />
+          <Share2 className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         
         {isAdmin && onEdit && (
           <button
             onClick={() => onEdit(image)}
-            className="p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
+            className="p-1 sm:p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-75 transition-colors"
             title="Edit"
           >
-            <Edit3 className="h-5 w-5" />
+            <Edit3 className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         )}
       </div>
 
-      {/* Image counter (only if multiple images) */}
+      {/* Image counter (only if multiple images) - Mobile Optimized */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 left-4 z-10 bg-black bg-opacity-50 text-white text-sm px-3 py-1 rounded-full">
+        <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 z-10 bg-black bg-opacity-50 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full">
           {currentIndex + 1} of {images.length}
         </div>
       )}
