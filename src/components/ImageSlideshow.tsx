@@ -50,14 +50,15 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
     };
   }, [isPlaying, images.length, interval]);
 
-  // Function to check if an image is landscape with stricter criteria
+  // Function to check if an image is landscape with very strict criteria
   const isLandscapeImage = (url: string): Promise<boolean> => {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
-        // Stricter landscape detection: width should be at least 1.2x height for better slideshow fit
+        // Very strict landscape detection: width should be at least 1.5x height to exclude portrait/square images
         const aspectRatio = img.width / img.height;
-        resolve(aspectRatio >= 1.2);
+        console.log(`Image aspect ratio: ${aspectRatio.toFixed(2)} (${img.width}x${img.height})`);
+        resolve(aspectRatio >= 1.5);
       };
       img.onerror = () => {
         // If image fails to load, assume it's not landscape to avoid showing bad images
@@ -88,10 +89,14 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         }
       }
 
-      // Shuffle images in random order
-      const shuffledImages = landscapeImages.sort(() => Math.random() - 0.5);
+      // Shuffle images in truly random order using Fisher-Yates algorithm
+      const shuffledImages = [...landscapeImages];
+      for (let i = shuffledImages.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledImages[i], shuffledImages[j]] = [shuffledImages[j], shuffledImages[i]];
+      }
 
-      console.log(`📸 Slideshow: Found ${shuffledImages.length} landscape images out of ${loadedImages.length} total images (displayed in random order)`);
+      console.log(`📸 Slideshow: Found ${shuffledImages.length} wide landscape images out of ${loadedImages.length} total images (displayed in random order)`);
       setImages(shuffledImages);
     } catch (error) {
       console.error('Error loading images for slideshow:', error);
@@ -137,7 +142,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
             </svg>
           </div>
                      <p className="text-gray-600">No wide landscape images available for slideshow</p>
-           <p className="text-gray-500 text-sm mt-2">Only wide landscape images (1.2:1 ratio or wider) are displayed here for optimal slideshow viewing</p>
+           <p className="text-gray-500 text-sm mt-2">Only wide landscape images (1.5:1 ratio or wider) are displayed here for optimal slideshow viewing</p>
         </div>
       </div>
     );
@@ -149,11 +154,12 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
     <div className={`relative w-full h-96 md:h-[500px] lg:h-[600px] overflow-hidden rounded-2xl shadow-2xl ${className}`}>
       {/* Main Image */}
       <div className="relative w-full h-full">
-        <img
-          src={currentImage.url}
-          alt={currentImage.title}
-          className="w-full h-full object-cover transition-opacity duration-1000"
-        />
+                 <img
+           src={currentImage.url}
+           alt={currentImage.title}
+           className="w-full h-full object-cover object-center transition-opacity duration-1000"
+           style={{ objectFit: 'cover', objectPosition: 'center' }}
+         />
         
                  {/* Overlay with image info */}
          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">

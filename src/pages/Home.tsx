@@ -159,7 +159,7 @@ const Home: React.FC = () => {
               autoPlay={true}
               interval={4000}
               showControls={true}
-              showIndicators={true}
+              showIndicators={false}
               className="mx-auto"
             />
           </div>
