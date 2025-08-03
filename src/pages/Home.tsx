@@ -4,7 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../config/firebase';
 import ImageSlideshow from '../components/ImageSlideshow';
 import HomepageEditor from '../components/HomepageEditor';
-import { Camera, Heart, Users, Calendar, Star, Award, ArrowRight, Play, Instagram, Facebook, Twitter, Edit3 } from 'lucide-react';
+import { Camera, Heart, Users, Calendar, Star, Award, ArrowRight, Play, Instagram, Edit3 } from 'lucide-react';
 
 const Home: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -338,18 +338,17 @@ const Home: React.FC = () => {
             </Link>
           </div>
           
-          {/* Social Links */}
-          <div className="mt-12 flex justify-center space-x-6">
-            <a href="#" className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Instagram className="h-6 w-6" />
-            </a>
-            <a href="#" className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Facebook className="h-6 w-6" />
-            </a>
-            <a href="#" className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-              <Twitter className="h-6 w-6" />
-            </a>
-          </div>
+                     {/* Instagram Link */}
+           <div className="mt-12 flex justify-center">
+             <a 
+               href="https://www.instagram.com/sugunstories/" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+             >
+               <Instagram className="h-6 w-6" />
+             </a>
+           </div>
         </div>
       </section>
 
