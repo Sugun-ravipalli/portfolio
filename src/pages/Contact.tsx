@@ -226,7 +226,7 @@ const Contact: React.FC = () => {
             <div className="w-px h-6 bg-dark-300"></div>
             <div className="flex items-center space-x-2 text-dark-600">
               <MessageCircle className="h-5 w-5" />
-              <span>Available across India</span>
+              <span>Richardson, Texas</span>
             </div>
           </div>
         </div>
