@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Camera, Settings } from 'lucide-react';
+import { auth } from '../config/firebase';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation();
+
+  // Check if user is logged in for admin status
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAdmin(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -41,13 +52,15 @@ const Navbar: React.FC = () => {
                 {item.name}
               </Link>
             ))}
-            <Link
-              to="/admin"
-              className="flex items-center space-x-1 text-dark-600 hover:text-primary-500 transition-colors duration-200"
-            >
-              <Settings className="h-4 w-4" />
-              <span className="font-medium">Admin</span>
-            </Link>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="flex items-center space-x-1 text-dark-600 hover:text-primary-500 transition-colors duration-200"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="font-medium">Admin</span>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -77,14 +90,16 @@ const Navbar: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                to="/admin"
-                className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-dark-600 hover:text-primary-500 hover:bg-gray-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <Settings className="h-4 w-4" />
-                <span>Admin</span>
-              </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-dark-600 hover:text-primary-500 hover:bg-gray-50"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Settings className="h-4 w-4" />
+                  <span>Admin</span>
+                </Link>
+              )}
             </div>
           </div>
         )}

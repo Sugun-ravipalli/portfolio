@@ -31,31 +31,13 @@ const Contact: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Editable contact information
+  // Editable contact information - Only Instagram for public display
   const [contactInfo, setContactInfo] = useState([
     {
       icon: Instagram,
       title: 'Instagram',
       value: '@sugunstories',
       link: 'https://www.instagram.com/sugunstories/'
-    },
-    {
-      icon: Mail,
-      title: 'Email',
-      value: 'sugunstories@gmail.com',
-      link: 'mailto:sugunstories@gmail.com'
-    },
-    {
-      icon: Phone,
-      title: 'Phone',
-      value: '682-390-5902',
-      link: 'tel:+16823905902'
-    },
-    {
-      icon: MapPin,
-      title: 'Location',
-      value: 'Richardson, Texas',
-      link: '#'
     }
   ]);
 
@@ -134,31 +116,13 @@ const Contact: React.FC = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    // Reset to original values
+    // Reset to original values - Only Instagram
     setContactInfo([
       {
         icon: Instagram,
         title: 'Instagram',
         value: '@sugunstories',
         link: 'https://www.instagram.com/sugunstories/'
-      },
-      {
-        icon: Mail,
-        title: 'Email',
-        value: 'sugunstories@gmail.com',
-        link: 'mailto:sugunstories@gmail.com'
-      },
-      {
-        icon: Phone,
-        title: 'Phone',
-        value: '682-390-5902',
-        link: 'tel:+16823905902'
-      },
-      {
-        icon: MapPin,
-        title: 'Location',
-        value: 'Richardson, Texas',
-        link: '#'
       }
     ]);
   };

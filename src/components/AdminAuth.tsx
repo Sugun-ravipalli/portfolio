@@ -106,12 +106,7 @@ const AdminAuth: React.FC<AdminAuthProps> = ({ onAuthSuccess }) => {
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              Demo credentials: admin@example.com / password123
-            </p>
-          </div>
+
         </div>
       </div>
     </div>

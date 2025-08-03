@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Camera, Mail, Phone, MapPin, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Camera, Mail, Phone, MapPin, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -19,26 +19,16 @@ const Footer: React.FC = () => {
               Capturing life&apos;s precious moments with passion and creativity. 
               Professional photography services for all your special occasions.
             </p>
-            <div className="flex space-x-4">
-              <a
-                href="#"
-                className="p-2 bg-dark-800 rounded-full hover:bg-primary-500 transition-colors duration-200"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-dark-800 rounded-full hover:bg-primary-500 transition-colors duration-200"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="p-2 bg-dark-800 rounded-full hover:bg-primary-500 transition-colors duration-200"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-            </div>
+                         <div className="flex space-x-4">
+               <a
+                 href="https://www.instagram.com/sugunstories/"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="p-2 bg-dark-800 rounded-full hover:bg-primary-500 transition-colors duration-200"
+               >
+                 <Instagram className="h-5 w-5" />
+               </a>
+             </div>
           </div>
 
           {/* Services */}
