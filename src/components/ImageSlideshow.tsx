@@ -50,17 +50,18 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
     };
   }, [isPlaying, images.length, interval]);
 
-  // Function to check if an image is landscape
+  // Function to check if an image is landscape with stricter criteria
   const isLandscapeImage = (url: string): Promise<boolean> => {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
-        // Consider landscape if width >= height (aspect ratio >= 1)
-        resolve(img.width >= img.height);
+        // Stricter landscape detection: width should be at least 1.2x height for better slideshow fit
+        const aspectRatio = img.width / img.height;
+        resolve(aspectRatio >= 1.2);
       };
       img.onerror = () => {
-        // If image fails to load, assume it's landscape to avoid blocking
-        resolve(true);
+        // If image fails to load, assume it's not landscape to avoid showing bad images
+        resolve(false);
       };
       img.src = url;
     });
@@ -78,13 +79,6 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         ...doc.data()
       })) as Image[];
 
-      // Sort by upload date (newest first)
-      loadedImages.sort((a, b) => {
-        const dateA = a.uploadedAt?.toDate ? a.uploadedAt.toDate() : new Date(a.uploadedAt);
-        const dateB = b.uploadedAt?.toDate ? b.uploadedAt.toDate() : new Date(b.uploadedAt);
-        return dateB.getTime() - dateA.getTime();
-      });
-
       // Filter for landscape images only
       const landscapeImages: Image[] = [];
       for (const image of loadedImages) {
@@ -94,8 +88,11 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         }
       }
 
-      console.log(`📸 Slideshow: Found ${landscapeImages.length} landscape images out of ${loadedImages.length} total images`);
-      setImages(landscapeImages);
+      // Shuffle images in random order
+      const shuffledImages = landscapeImages.sort(() => Math.random() - 0.5);
+
+      console.log(`📸 Slideshow: Found ${shuffledImages.length} landscape images out of ${loadedImages.length} total images (displayed in random order)`);
+      setImages(shuffledImages);
     } catch (error) {
       console.error('Error loading images for slideshow:', error);
     } finally {
@@ -139,8 +136,8 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <p className="text-gray-600">No landscape images available for slideshow</p>
-          <p className="text-gray-500 text-sm mt-2">Only landscape images are displayed here for optimal viewing</p>
+                     <p className="text-gray-600">No wide landscape images available for slideshow</p>
+           <p className="text-gray-500 text-sm mt-2">Only wide landscape images (1.2:1 ratio or wider) are displayed here for optimal slideshow viewing</p>
         </div>
       </div>
     );
@@ -204,22 +201,7 @@ const ImageSlideshow: React.FC<ImageSlideshowProps> = ({
         </>
       )}
 
-      {/* Indicators */}
-      {showIndicators && images.length > 1 && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? 'bg-white scale-125'
-                  : 'bg-white/50 hover:bg-white/75'
-              }`}
-            />
-          ))}
-        </div>
-      )}
+             {/* Removed dot tracker as requested - clean slideshow display only */}
     </div>
   );
 };
