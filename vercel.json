@@ -9,6 +9,28 @@
       }
     }
   ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://sugunstories-ruby.vercel.app",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "https://sugunstories-ruby.vercel.app/contact",
+      "permanent": true
+    },
+    {
+      "source": "/gallery",
+      "destination": "https://sugunstories-ruby.vercel.app/gallery",
+      "permanent": true
+    },
+    {
+      "source": "/admin",
+      "destination": "https://sugunstories-ruby.vercel.app/admin",
+      "permanent": true
+    }
+  ],
   "routes": [
     {
       "src": "/static/(.*)",
