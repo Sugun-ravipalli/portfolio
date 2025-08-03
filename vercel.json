@@ -11,42 +11,20 @@
   ],
   "redirects": [
     {
-      "source": "/",
-      "destination": "https://sugunstories-ruby.vercel.app",
-      "permanent": true
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
     },
     {
-      "source": "/contact",
-      "destination": "https://sugunstories-ruby.vercel.app/contact",
-      "permanent": true
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
     },
     {
-      "source": "/gallery",
-      "destination": "https://sugunstories-ruby.vercel.app/gallery",
-      "permanent": true
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
     },
     {
-      "source": "/admin",
-      "destination": "https://sugunstories-ruby.vercel.app/admin",
-      "permanent": true
-    }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 } 
