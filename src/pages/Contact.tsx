@@ -42,19 +42,19 @@ const Contact: React.FC = () => {
     {
       icon: Mail,
       title: 'Email',
-      value: 'hello@sugunstories.com',
-      link: 'mailto:hello@sugunstories.com'
+      value: 'sugunstories@gmail.com',
+      link: 'mailto:sugunstories@gmail.com'
     },
     {
       icon: Phone,
-      title: 'WhatsApp',
-      value: '+91 98765 43210',
-      link: 'tel:+919876543210'
+      title: 'Phone',
+      value: '682-390-5902',
+      link: 'tel:+16823905902'
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'Available across India',
+      value: 'Richardson, Texas',
       link: '#'
     }
   ]);
@@ -145,19 +145,19 @@ const Contact: React.FC = () => {
       {
         icon: Mail,
         title: 'Email',
-        value: 'hello@sugunstories.com',
-        link: 'mailto:hello@sugunstories.com'
+        value: 'sugunstories@gmail.com',
+        link: 'mailto:sugunstories@gmail.com'
       },
       {
         icon: Phone,
-        title: 'WhatsApp',
-        value: '+91 98765 43210',
-        link: 'tel:+919876543210'
+        title: 'Phone',
+        value: '682-390-5902',
+        link: 'tel:+16823905902'
       },
       {
         icon: MapPin,
         title: 'Location',
-        value: 'Available across India',
+        value: 'Richardson, Texas',
         link: '#'
       }
     ]);

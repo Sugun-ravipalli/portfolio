@@ -101,15 +101,15 @@ const Footer: React.FC = () => {
             <div className="space-y-3 text-dark-300">
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400" />
-                <span>hello@sugunstories.com</span>
+                <span>sugunstories@gmail.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-400" />
-                <span>+1 (555) 123-4567</span>
+                <span>682-390-5902</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-5 w-5 text-primary-400" />
-                <span>123 Photography St, City, State 12345</span>
+                <span>Richardson, Texas</span>
               </div>
             </div>
           </div>
