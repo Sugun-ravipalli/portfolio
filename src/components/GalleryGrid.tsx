@@ -450,7 +450,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
               isReordering={isReordering}
             />
           ))}
-        </div>
+            </div>
       ) : (
         <div className="text-center py-20">
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -476,10 +476,10 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
               </div>
               <div className="mt-3 text-xs text-blue-600">
                 <p>💡 Tip: Check browser console for detailed query logs</p>
-              </div>
-            </div>
-          )}
-          
+          </div>
+        </div>
+      )}
+
           {/* Helpful suggestions */}
           <div className="mt-6">
             <p className="text-sm text-gray-500 mb-4">
