@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
             <Link to="/" className="flex items-center space-x-2">
               <Camera className="h-8 w-8 text-primary-500" />
               <span className="text-xl font-serif font-semibold">
-                PhotoStudio
+                Sugunstories
               </span>
             </Link>
             <p className="text-dark-300 leading-relaxed">
@@ -101,7 +101,7 @@ const Footer: React.FC = () => {
             <div className="space-y-3 text-dark-300">
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400" />
-                <span>hello@photostudio.com</span>
+                <span>hello@sugunstories.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary-400" />
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
         <div className="border-t border-dark-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-dark-400 text-sm">
-              © 2024 PhotoStudio. All rights reserved.
+              © 2024 Sugunstories. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm text-dark-400">
               <a href="#" className="hover:text-primary-400 transition-colors">

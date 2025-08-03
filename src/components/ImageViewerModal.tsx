@@ -196,9 +196,9 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
         </>
       )}
 
-      {/* Image container */}
+      {/* Image container - Auto-fit to screen */}
       <div 
-        className="relative flex-1 flex items-center justify-center p-4 overflow-hidden"
+        className="relative flex-1 flex items-center justify-center p-8 overflow-hidden"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -207,7 +207,7 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
         <img
           src={image.url}
           alt={image.title}
-          className="max-w-full max-h-full object-contain transition-transform duration-200"
+          className="max-w-[95vw] max-h-[90vh] w-auto h-auto object-contain transition-transform duration-200"
           style={{
             transform: `scale(${scale}) rotate(${rotation}deg) translate(${position.x}px, ${position.y}px)`,
             cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
@@ -283,35 +283,14 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
         )}
       </div>
 
-      {/* Image info */}
-      <div className="absolute bottom-4 left-4 right-4 z-10 bg-black bg-opacity-50 text-white p-4 rounded-lg">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-1">{image.title}</h3>
-            {image.description && (
-              <p className="text-sm text-gray-300 mb-2">{image.description}</p>
-            )}
-            <div className="flex items-center space-x-4 text-xs text-gray-400">
-              <span>Category: {image.category}</span>
-              <span>Uploaded: {formatDate(image.uploadedAt)}</span>
-              {image.fileSize && (
-                <span>Size: {Math.round(image.fileSize / 1024)} KB</span>
-              )}
-            </div>
-          </div>
-          
-          {images.length > 1 && (
-            <div className="text-sm text-gray-400">
-              {currentIndex + 1} of {images.length}
-            </div>
-          )}
+      {/* Image counter (only if multiple images) */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-4 z-10 bg-black bg-opacity-50 text-white text-sm px-3 py-1 rounded-full">
+          {currentIndex + 1} of {images.length}
         </div>
-      </div>
+      )}
 
-      {/* Keyboard shortcuts hint */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full">
-        Use arrow keys to navigate • +/- to zoom • 0 to reset • ESC to close
-      </div>
+      {/* Clean interface - no keyboard hints */}
     </div>
   );
 };

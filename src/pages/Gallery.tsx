@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../config/firebase';
-import GalleryGrid from '../components/GalleryGrid';
+import PinterestGallery from '../components/PinterestGallery';
 import ImageViewerModal from '../components/ImageViewerModal';
 import CategoryFilter from '../components/CategoryFilter';
 import {
@@ -11,8 +11,7 @@ import {
   Camera,
   Calendar,
   Settings,
-  Grid,
-  Search
+  Grid
 } from 'lucide-react';
 
 interface Image {
@@ -31,7 +30,6 @@ interface Image {
 const Gallery: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [viewerImage, setViewerImage] = useState<Image | null>(null);
   const [viewerImages, setViewerImages] = useState<Image[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -139,19 +137,7 @@ const Gallery: React.FC = () => {
               Each photo tells a unique story of joy, love, and celebration.
             </p>
 
-            {/* Search and Filter Bar */}
-            <div className="max-w-md mx-auto mb-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search photos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 rounded-lg text-white placeholder-blue-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                />
-              </div>
-            </div>
+
 
             {/* Category Filter Pills */}
             <CategoryFilter
@@ -200,36 +186,36 @@ const Gallery: React.FC = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
-        <GalleryGrid
+        {/* Pinterest Style Gallery */}
+        <PinterestGallery
           category={selectedCategory || undefined}
           isAdmin={isAdmin}
           onImageClick={handleImageClick}
         />
       </div>
 
-      {/* Enhanced Call to Action */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-6">
-              Ready to Capture Your Moments?
-            </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-              Let us help you create beautiful memories that last a lifetime.
-              Our professional photography services are designed to capture every special moment.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Book a Session
-              </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-gray-900 transition-all">
-                Contact Us
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+             {/* Portfolio Call to Action */}
+       <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+           <div className="text-center">
+             <h2 className="text-4xl font-bold mb-6">
+               Let's Create Something Amazing Together
+             </h2>
+             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+               I'm passionate about capturing beautiful moments and telling stories through photography.
+               If you're interested in collaborating on creative projects, I'd love to hear from you!
+             </p>
+             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                 Let's Collaborate
+               </button>
+               <button className="border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-gray-900 transition-all">
+                 Get in Touch
+               </button>
+             </div>
+           </div>
+         </div>
+       </div>
 
       {/* Image Viewer Modal */}
       <ImageViewerModal

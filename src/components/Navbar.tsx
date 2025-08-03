@@ -9,7 +9,6 @@ const Navbar: React.FC = () => {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Gallery', path: '/gallery' },
-    { name: 'Upload', path: '/upload' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -23,7 +22,7 @@ const Navbar: React.FC = () => {
           <Link to="/" className="flex items-center space-x-2">
             <Camera className="h-8 w-8 text-primary-500" />
             <span className="text-xl font-serif font-semibold text-dark-800">
-              PhotoStudio
+              Sugunstories
             </span>
           </Link>
 
