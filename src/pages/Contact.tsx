@@ -13,6 +13,7 @@ import {
   X, 
   Settings 
 } from 'lucide-react';
+import { auth } from '../config/firebase';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -25,8 +26,7 @@ const Contact: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   // Admin state
-  const [isAdminMode, setIsAdminMode] = useState(false);
-  const [adminPassword, setAdminPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -76,6 +76,15 @@ const Contact: React.FC = () => {
     });
   };
 
+  // Check if user is logged in for admin status
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAdmin(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -98,17 +107,8 @@ const Contact: React.FC = () => {
   };
 
   // Admin functions
-  const handleAdminLogin = () => {
-    if (adminPassword === 'thunderbuddies123') {
-      setIsAdminMode(true);
-      setAdminPassword('');
-    } else {
-      alert('Incorrect password');
-    }
-  };
-
   const handleLogout = () => {
-    setIsAdminMode(false);
+    auth.signOut();
     setIsEditing(false);
   };
 
@@ -188,28 +188,8 @@ const Contact: React.FC = () => {
   return (
     <div className="section-padding">
       <div className="container-custom">
-        {/* Admin Login/Controls */}
-        {!isAdminMode ? (
-          <div className="text-right mb-6">
-            <div className="inline-flex items-center space-x-2 bg-gray-100 rounded-lg p-2">
-              <input
-                type="password"
-                value={adminPassword}
-                onChange={(e) => setAdminPassword(e.target.value)}
-                placeholder="Admin password"
-                className="px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
-                onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
-              />
-              <button
-                onClick={handleAdminLogin}
-                className="px-3 py-1 bg-primary-500 text-white text-sm rounded hover:bg-primary-600 transition-colors flex items-center space-x-1"
-              >
-                <Settings className="h-4 w-4" />
-                <span>Login</span>
-              </button>
-            </div>
-          </div>
-        ) : (
+        {/* Admin Controls - Only visible when logged in */}
+        {isAdmin && (
           <div className="text-right mb-6">
             <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg p-2">
               <span className="text-sm font-medium">Admin Mode</span>
