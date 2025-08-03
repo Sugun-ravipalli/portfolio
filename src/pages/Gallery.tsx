@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import PinterestGallery from '../components/PinterestGallery';
 import ImageViewerModal from '../components/ImageViewerModal';
@@ -205,13 +206,13 @@ const Gallery: React.FC = () => {
                I'm passionate about capturing beautiful moments and telling stories through photography.
                If you're interested in collaborating on creative projects, I'd love to hear from you!
              </p>
-             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+             <div className="flex justify-center">
+               <Link 
+                 to="/contact"
+                 className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-block"
+               >
                  Let's Collaborate
-               </button>
-               <button className="border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-gray-900 transition-all">
-                 Get in Touch
-               </button>
+               </Link>
              </div>
            </div>
          </div>
