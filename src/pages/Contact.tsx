@@ -93,7 +93,7 @@ const Contact: React.FC = () => {
         publicKey: 'cCU4hIQZDsgyXVCPa'
       });
 
-      const result =       await emailjs.send(
+      const result = await emailjs.send(
         'sugunstories_emails', // Your service ID
         'template_n0ak4ma', // Your Contact Us template ID
         templateParams,
