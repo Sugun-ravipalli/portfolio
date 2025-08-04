@@ -76,13 +76,14 @@ const Contact: React.FC = () => {
       console.log('Starting email submission...');
       console.log('Form data:', formData);
       
-      // Send email using EmailJS
+      // Send email using EmailJS - This will send TO sugunstories@gmail.com
       const templateParams = {
-        name: formData.name,
-        email: formData.email,
+        from_name: formData.name,
+        from_email: formData.email,
         event_type: formData.eventType,
         message: formData.message,
-        reply_to: formData.email
+        reply_to: formData.email,
+        to_email: 'sugunstories@gmail.com'
       };
 
       console.log('Template params:', templateParams);
@@ -92,9 +93,9 @@ const Contact: React.FC = () => {
         publicKey: 'cCU4hIQZDsgyXVCPa'
       });
 
-      const result = await emailjs.send(
+      const result =       await emailjs.send(
         'sugunstories_emails', // Your service ID
-        'template_721vroo', // Your template ID
+        'template_n0ak4ma', // Your Contact Us template ID
         templateParams,
         'cCU4hIQZDsgyXVCPa' // Your public key
       );
