@@ -89,7 +89,7 @@ const Contact: React.FC = () => {
       console.log('Template params:', templateParams);
       console.log('EmailJS config:', {
         serviceId: 'sugunstories_emails',
-        templateId: 'template_721vroo',
+        templateId: 'template_n0ak4ma',
         publicKey: 'cCU4hIQZDsgyXVCPa'
       });
 
