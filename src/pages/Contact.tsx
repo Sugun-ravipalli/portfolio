@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import emailjs from 'emailjs-com';
 import { 
   Mail, 
   Phone, 
@@ -72,17 +73,32 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission - in production, send to Firebase or Formspree
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Send email using EmailJS
+      const templateParams = {
+        to_email: 'sugunstories@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        event_type: formData.eventType,
+        message: formData.message,
+        reply_to: formData.email
+      };
+
+      await emailjs.send(
+        'service_photography_portfolio', // You'll need to create this service ID
+        'template_contact_form', // You'll need to create this template ID
+        templateParams,
+        'YOUR_PUBLIC_KEY' // You'll need to get this from EmailJS
+      );
       
-      console.log('Form submitted:', formData);
+      console.log('Email sent successfully:', formData);
       
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: '', eventType: '' });
       
       setTimeout(() => setIsSubmitted(false), 5000);
     } catch (error) {
-      console.error('Form submission failed:', error);
+      console.error('Email sending failed:', error);
+      alert('Sorry, there was an error sending your message. Please try again or contact me directly at sugunstories@gmail.com');
     } finally {
       setIsSubmitting(false);
     }
