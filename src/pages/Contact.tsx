@@ -35,7 +35,7 @@ const Contact: React.FC = () => {
   // Editable contact information - Only Instagram for public display
   const [contactInfo, setContactInfo] = useState([
     {
-      icon: Instagram,
+      iconName: 'Instagram',
       title: 'Instagram',
       value: '@sugunstories',
       link: 'https://www.instagram.com/sugunstories/'
@@ -51,6 +51,22 @@ const Contact: React.FC = () => {
     'Event Photography',
     'Other'
   ];
+
+  // Function to get icon component by name
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case 'Instagram':
+        return Instagram;
+      case 'Mail':
+        return Mail;
+      case 'Phone':
+        return Phone;
+      case 'MapPin':
+        return MapPin;
+      default:
+        return Instagram;
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -76,8 +92,8 @@ const Contact: React.FC = () => {
       console.log('Starting email submission...');
       console.log('Form data:', formData);
       
-      // Send email using EmailJS - This will send TO sugunstories@gmail.com
-      const templateParams = {
+      // 1. Send notification email TO sugunstories@gmail.com
+      const notificationParams = {
         from_name: formData.name,
         from_email: formData.email,
         event_type: formData.eventType,
@@ -86,22 +102,23 @@ const Contact: React.FC = () => {
         to_email: 'sugunstories@gmail.com'
       };
 
-      console.log('Template params:', templateParams);
+      console.log('Sending notification email...');
+      console.log('Notification params:', notificationParams);
       console.log('EmailJS config:', {
         serviceId: 'sugunstories_emails',
         templateId: 'template_n0ak4ma',
         publicKey: 'cCU4hIQZDsgyXVCPa'
       });
-
-      const result = await emailjs.send(
+      
+      const notificationResult = await emailjs.send(
         'sugunstories_emails', // Your service ID
         'template_n0ak4ma', // Your Contact Us template ID
-        templateParams,
+        notificationParams,
         'cCU4hIQZDsgyXVCPa' // Your public key
       );
       
-      console.log('EmailJS result:', result);
-      console.log('Email sent successfully:', formData);
+      console.log('Notification email result:', notificationResult);
+      console.log('Email sent successfully!');
       
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: '', eventType: '' });
@@ -111,9 +128,24 @@ const Contact: React.FC = () => {
       console.error('Email sending failed:', error);
       console.error('Error details:', {
         message: error?.message || 'Unknown error',
-        stack: error?.stack || 'No stack trace'
+        stack: error?.stack || 'No stack trace',
+        errorType: error?.constructor?.name || 'Unknown',
+        errorText: error?.text || 'No error text'
       });
-      alert('Sorry, there was an error sending your message. Please try again or contact me directly at sugunstories@gmail.com');
+      
+      // More specific error message
+      let errorMessage = 'Sorry, there was an error sending your message. ';
+      if (error?.message?.includes('template')) {
+        errorMessage += 'Template ID might be incorrect.';
+      } else if (error?.message?.includes('service')) {
+        errorMessage += 'Service ID might be incorrect.';
+      } else if (error?.message?.includes('public key')) {
+        errorMessage += 'Public key might be incorrect.';
+      } else {
+        errorMessage += 'Please try again or contact me directly at sugunstories@gmail.com';
+      }
+      
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -148,14 +180,14 @@ const Contact: React.FC = () => {
   const handleCancel = () => {
     setIsEditing(false);
     // Reset to original values - Only Instagram
-    setContactInfo([
-      {
-        icon: Instagram,
-        title: 'Instagram',
-        value: '@sugunstories',
-        link: 'https://www.instagram.com/sugunstories/'
-      }
-    ]);
+          setContactInfo([
+        {
+          iconName: 'Instagram',
+          title: 'Instagram',
+          value: '@sugunstories',
+          link: 'https://www.instagram.com/sugunstories/'
+        }
+      ]);
   };
 
   const handleContactInfoChange = (index: number, field: 'value' | 'link', newValue: string) => {
@@ -387,7 +419,7 @@ const Contact: React.FC = () => {
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                     <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                      <info.icon className="h-6 w-6 text-white" />
+                      {React.createElement(getIconComponent(info.iconName), { className: "h-6 w-6 text-white" })}
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-dark-800 mb-1">

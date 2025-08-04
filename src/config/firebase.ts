@@ -32,10 +32,19 @@ const app = initializeApp(firebaseConfig);
 console.log('Firebase app initialized successfully');
 
 // Initialize Firebase services
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+// Only initialize analytics in production
+let analytics = null;
+if (process.env.NODE_ENV === 'production') {
+  try {
+    analytics = getAnalytics(app);
+  } catch (error) {
+    console.warn('Analytics initialization failed:', error);
+  }
+}
 
 console.log('Firebase services initialized:', {
   auth: !!auth,
