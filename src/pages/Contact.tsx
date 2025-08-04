@@ -73,6 +73,9 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      console.log('Starting email submission...');
+      console.log('Form data:', formData);
+      
       // Send email using EmailJS
       const templateParams = {
         name: formData.name,
@@ -82,21 +85,33 @@ const Contact: React.FC = () => {
         reply_to: formData.email
       };
 
-      await emailjs.send(
+      console.log('Template params:', templateParams);
+      console.log('EmailJS config:', {
+        serviceId: 'sugunstories_emails',
+        templateId: 'template_721vroo',
+        publicKey: 'cCU4hIQZDsgyXVCPa'
+      });
+
+      const result = await emailjs.send(
         'sugunstories_emails', // Your service ID
         'template_721vroo', // Your template ID
         templateParams,
         'cCU4hIQZDsgyXVCPa' // Your public key
       );
       
+      console.log('EmailJS result:', result);
       console.log('Email sent successfully:', formData);
       
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: '', eventType: '' });
       
       setTimeout(() => setIsSubmitted(false), 5000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Email sending failed:', error);
+      console.error('Error details:', {
+        message: error?.message || 'Unknown error',
+        stack: error?.stack || 'No stack trace'
+      });
       alert('Sorry, there was an error sending your message. Please try again or contact me directly at sugunstories@gmail.com');
     } finally {
       setIsSubmitting(false);
