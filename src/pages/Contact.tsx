@@ -75,19 +75,18 @@ const Contact: React.FC = () => {
     try {
       // Send email using EmailJS
       const templateParams = {
-        to_email: 'sugunstories@gmail.com',
-        from_name: formData.name,
-        from_email: formData.email,
+        name: formData.name,
+        email: formData.email,
         event_type: formData.eventType,
         message: formData.message,
         reply_to: formData.email
       };
 
       await emailjs.send(
-        'service_photography_portfolio', // You'll need to create this service ID
+        'sugunstories_emails', // Your service ID
         'template_contact_form', // You'll need to create this template ID
         templateParams,
-        'YOUR_PUBLIC_KEY' // You'll need to get this from EmailJS
+        'cCU4hIQZDsgyXVCPa' // Your public key
       );
       
       console.log('Email sent successfully:', formData);
