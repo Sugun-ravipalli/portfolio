@@ -84,7 +84,7 @@ const Contact: React.FC = () => {
 
       await emailjs.send(
         'sugunstories_emails', // Your service ID
-        'template_contact_form', // You'll need to create this template ID
+        'template_721vroo', // Your template ID
         templateParams,
         'cCU4hIQZDsgyXVCPa' // Your public key
       );
