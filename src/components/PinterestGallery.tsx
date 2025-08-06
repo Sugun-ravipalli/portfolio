@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Filter, SortAsc, SortDesc, Grid, List, Loader2 } from 'lucide-react';
+import { Filter, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Image {
@@ -204,52 +204,22 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
       {/* Controls Bar - Mobile Optimized */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <div className="flex flex-col space-y-4">
-          {/* Top row - Filters and Results */}
+          {/* Top row - Filters */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            {/* Left side - Filters and sorting */}
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-              {/* Category Filter */}
-              <div className="flex items-center space-x-2">
-                <Filter className="h-4 w-4 text-gray-500" />
-                <select
-                  value={currentCategory}
-                  onChange={(e) => handleCategoryChange(e.target.value === 'all' ? null : e.target.value)}
-                  className="flex-1 sm:flex-none px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* Sort Options */}
-              <div className="flex items-center space-x-2">
-                {sortBy === 'newest' ? (
-                  <SortDesc className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <SortAsc className="h-4 w-4 text-gray-500" />
-                )}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="title">Title A-Z</option>
-                  <option value="manual">Manual Order</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Right side - Results count */}
-            <div className="flex items-center justify-center sm:justify-end">
-              <p className="text-sm text-gray-600">
-                {images.length} image{images.length !== 1 ? 's' : ''} found
-                {currentCategory !== 'all' && ` in ${categories.find(c => c.id === currentCategory)?.name}`}
-              </p>
+            {/* Left side - Category Filter */}
+            <div className="flex items-center space-x-2">
+              <Filter className="h-4 w-4 text-gray-500" />
+              <select
+                value={currentCategory}
+                onChange={(e) => handleCategoryChange(e.target.value === 'all' ? null : e.target.value)}
+                className="flex-1 sm:flex-none px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
