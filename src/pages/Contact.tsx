@@ -42,6 +42,13 @@ const Contact: React.FC = () => {
     }
   ]);
 
+  // Editable availability timings
+  const [availabilityTimings, setAvailabilityTimings] = useState({
+    weekdays: '10:00 AM - 8:00 PM',
+    weekends: '9:00 AM - 6:00 PM',
+    events: 'Flexible timing'
+  });
+
   const eventTypes = [
     'Wedding Photography',
     'Pre-Wedding Shoot',
@@ -167,6 +174,7 @@ const Contact: React.FC = () => {
       // Simulate saving to localStorage or database
       await new Promise(resolve => setTimeout(resolve, 1000));
       localStorage.setItem('contactInfo', JSON.stringify(contactInfo));
+      localStorage.setItem('availabilityTimings', JSON.stringify(availabilityTimings));
       setSaveSuccess(true);
       setIsEditing(false);
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -180,14 +188,20 @@ const Contact: React.FC = () => {
   const handleCancel = () => {
     setIsEditing(false);
     // Reset to original values - Only Instagram
-          setContactInfo([
-        {
-          iconName: 'Instagram',
-          title: 'Instagram',
-          value: '@sugunstories',
-          link: 'https://www.instagram.com/sugunstories/'
-        }
-      ]);
+    setContactInfo([
+      {
+        iconName: 'Instagram',
+        title: 'Instagram',
+        value: '@sugunstories',
+        link: 'https://www.instagram.com/sugunstories/'
+      }
+    ]);
+    // Reset availability timings to original values
+    setAvailabilityTimings({
+      weekdays: '10:00 AM - 8:00 PM',
+      weekends: '9:00 AM - 6:00 PM',
+      events: 'Flexible timing'
+    });
   };
 
   const handleContactInfoChange = (index: number, field: 'value' | 'link', newValue: string) => {
@@ -199,7 +213,14 @@ const Contact: React.FC = () => {
     setContactInfo(updatedContactInfo);
   };
 
-  // Load saved contact info on component mount
+  const handleAvailabilityChange = (field: 'weekdays' | 'weekends' | 'events', newValue: string) => {
+    setAvailabilityTimings(prev => ({
+      ...prev,
+      [field]: newValue
+    }));
+  };
+
+  // Load saved contact info and availability timings on component mount
   useEffect(() => {
     const savedContactInfo = localStorage.getItem('contactInfo');
     if (savedContactInfo) {
@@ -208,6 +229,16 @@ const Contact: React.FC = () => {
         setContactInfo(parsed);
       } catch (error) {
         console.error('Error loading saved contact info:', error);
+      }
+    }
+
+    const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
+    if (savedAvailabilityTimings) {
+      try {
+        const parsed = JSON.parse(savedAvailabilityTimings);
+        setAvailabilityTimings(parsed);
+      } catch (error) {
+        console.error('Error loading saved availability timings:', error);
       }
     }
   }, []);
@@ -467,15 +498,45 @@ const Contact: React.FC = () => {
               <div className="space-y-3 text-dark-600">
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Weekdays</span>
-                  <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">10:00 AM - 8:00 PM</span>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={availabilityTimings.weekdays}
+                      onChange={(e) => handleAvailabilityChange('weekdays', e.target.value)}
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="e.g., 10:00 AM - 8:00 PM"
+                    />
+                  ) : (
+                    <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">{availabilityTimings.weekdays}</span>
+                  )}
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Weekends</span>
-                  <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">9:00 AM - 6:00 PM</span>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={availabilityTimings.weekends}
+                      onChange={(e) => handleAvailabilityChange('weekends', e.target.value)}
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="e.g., 9:00 AM - 6:00 PM"
+                    />
+                  ) : (
+                    <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">{availabilityTimings.weekends}</span>
+                  )}
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Events</span>
-                  <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">Flexible timing</span>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={availabilityTimings.events}
+                      onChange={(e) => handleAvailabilityChange('events', e.target.value)}
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      placeholder="e.g., Flexible timing"
+                    />
+                  ) : (
+                    <span className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">{availabilityTimings.events}</span>
+                  )}
                 </div>
               </div>
             </div>
