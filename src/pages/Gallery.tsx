@@ -86,6 +86,13 @@ const Gallery: React.FC = () => {
       icon: Heart,
       description: 'Beautiful wedding ceremonies',
       color: 'from-red-500 to-pink-500'
+    },
+    {
+      id: 'graduation',
+      name: 'Graduation',
+      icon: Camera,
+      description: 'Academic achievements and milestones',
+      color: 'from-green-500 to-blue-500'
     }
   ];
 

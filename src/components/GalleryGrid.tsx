@@ -70,7 +70,8 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
     { id: 'housewarming', name: 'Housewarming' },
     { id: 'events', name: 'Events' },
     { id: 'portraits', name: 'Portraits' },
-    { id: 'wedding', name: 'Wedding' }
+    { id: 'wedding', name: 'Wedding' },
+    { id: 'graduation', name: 'Graduation' }
   ];
 
   // Update internal category when prop changes

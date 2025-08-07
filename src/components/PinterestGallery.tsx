@@ -70,7 +70,8 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
     { id: 'housewarming', name: 'Housewarming' },
     { id: 'events', name: 'Events' },
     { id: 'portraits', name: 'Portraits' },
-    { id: 'wedding', name: 'Wedding' }
+    { id: 'wedding', name: 'Wedding' },
+    { id: 'graduation', name: 'Graduation' }
   ];
 
   // Update internal category when prop changes
@@ -201,26 +202,19 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Controls Bar - Mobile Optimized */}
+      {/* Category Display */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-        <div className="flex flex-col space-y-4">
-          {/* Top row - Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            {/* Left side - Category Filter */}
-            <div className="flex items-center space-x-2">
-              <Filter className="h-4 w-4 text-gray-500" />
-              <select
-                value={currentCategory}
-                onChange={(e) => handleCategoryChange(e.target.value === 'all' ? null : e.target.value)}
-                className="flex-1 sm:flex-none px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg font-medium text-gray-700">
+              You are watching{' '}
+              <span className="text-blue-600 font-semibold">
+                {currentCategory === 'all' 
+                  ? 'All Categories' 
+                  : categories.find(c => c.id === currentCategory)?.name || currentCategory
+                }
+              </span>
+            </p>
           </div>
         </div>
       </div>
