@@ -14,7 +14,8 @@ import {
   X, 
   Settings 
 } from 'lucide-react';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -171,15 +172,24 @@ const Contact: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Simulate saving to localStorage or database
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Save to Firebase
+      const settingsRef = doc(db, 'settings', 'contact');
+      await setDoc(settingsRef, {
+        contactInfo,
+        availabilityTimings,
+        updatedAt: new Date()
+      }, { merge: true });
+      
+      // Also save to localStorage as backup
       localStorage.setItem('contactInfo', JSON.stringify(contactInfo));
       localStorage.setItem('availabilityTimings', JSON.stringify(availabilityTimings));
+      
       setSaveSuccess(true);
       setIsEditing(false);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (error) {
       console.error('Save failed:', error);
+      alert('Failed to save changes. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -222,25 +232,68 @@ const Contact: React.FC = () => {
 
   // Load saved contact info and availability timings on component mount
   useEffect(() => {
-    const savedContactInfo = localStorage.getItem('contactInfo');
-    if (savedContactInfo) {
+    const loadSettings = async () => {
       try {
-        const parsed = JSON.parse(savedContactInfo);
-        setContactInfo(parsed);
-      } catch (error) {
-        console.error('Error loading saved contact info:', error);
-      }
-    }
+        // Try to load from Firebase first
+        const settingsRef = doc(db, 'settings', 'contact');
+        const settingsDoc = await getDoc(settingsRef);
+        
+        if (settingsDoc.exists()) {
+          const data = settingsDoc.data();
+          if (data.contactInfo) {
+            setContactInfo(data.contactInfo);
+          }
+          if (data.availabilityTimings) {
+            setAvailabilityTimings(data.availabilityTimings);
+          }
+        } else {
+          // Fallback to localStorage if no Firebase data
+          const savedContactInfo = localStorage.getItem('contactInfo');
+          if (savedContactInfo) {
+            try {
+              const parsed = JSON.parse(savedContactInfo);
+              setContactInfo(parsed);
+            } catch (error) {
+              console.error('Error loading saved contact info:', error);
+            }
+          }
 
-    const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
-    if (savedAvailabilityTimings) {
-      try {
-        const parsed = JSON.parse(savedAvailabilityTimings);
-        setAvailabilityTimings(parsed);
+          const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
+          if (savedAvailabilityTimings) {
+            try {
+              const parsed = JSON.parse(savedAvailabilityTimings);
+              setAvailabilityTimings(parsed);
+            } catch (error) {
+              console.error('Error loading saved availability timings:', error);
+            }
+          }
+        }
       } catch (error) {
-        console.error('Error loading saved availability timings:', error);
+        console.error('Error loading settings from Firebase:', error);
+        // Fallback to localStorage on error
+        const savedContactInfo = localStorage.getItem('contactInfo');
+        if (savedContactInfo) {
+          try {
+            const parsed = JSON.parse(savedContactInfo);
+            setContactInfo(parsed);
+          } catch (error) {
+            console.error('Error loading saved contact info:', error);
+          }
+        }
+
+        const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
+        if (savedAvailabilityTimings) {
+          try {
+            const parsed = JSON.parse(savedAvailabilityTimings);
+            setAvailabilityTimings(parsed);
+          } catch (error) {
+            console.error('Error loading saved availability timings:', error);
+          }
+        }
       }
-    }
+    };
+
+    loadSettings();
   }, []);
 
   return (
