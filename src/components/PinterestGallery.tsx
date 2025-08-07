@@ -94,14 +94,9 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
         const imagesRef = collection(db, 'images');
         let q;
         
-        if (currentCategory && currentCategory !== 'all') {
-          console.log("📂 Filtering by category:", currentCategory);
-          // Try exact match first
-          q = query(imagesRef, where('category', '==', currentCategory));
-        } else {
-          console.log("📂 Loading all categories");
-          q = query(imagesRef);
-        }
+        // Always load all images first for better debugging and filtering
+        console.log("📂 Loading all images for debugging...");
+        q = query(imagesRef);
 
         console.log("🔍 Executing Firestore query:", q);
 
@@ -111,14 +106,52 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
             ...doc.data()
           })) as Image[];
 
-          console.log(`✅ Loaded ${loadedImages.length} images for category: ${currentCategory}`);
+          console.log(`✅ Loaded ${loadedImages.length} total images`);
           
           // Debug: Log all unique categories found in the loaded images
           const uniqueCategories = Array.from(new Set(loadedImages.map(img => img.category)));
           console.log("🔍 All unique categories in loaded images:", uniqueCategories);
           
-          // Sort locally based on sortBy preference
-          const sortedImages = [...loadedImages].sort((a, b) => {
+          // Filter images based on current category
+          let filteredImages = loadedImages;
+          if (currentCategory && currentCategory !== 'all') {
+            console.log(`🔍 Filtering for category: "${currentCategory}"`);
+            
+            // Try multiple matching strategies
+            filteredImages = loadedImages.filter(img => {
+              const imgCategory = img.category || '';
+              const targetCategory = currentCategory;
+              
+              // Exact match
+              if (imgCategory === targetCategory) {
+                console.log(`✅ Exact match found: "${imgCategory}" === "${targetCategory}"`);
+                return true;
+              }
+              
+              // Case-insensitive exact match
+              if (imgCategory.toLowerCase() === targetCategory.toLowerCase()) {
+                console.log(`✅ Case-insensitive match found: "${imgCategory}" === "${targetCategory}"`);
+                return true;
+              }
+              
+              // Contains match (for variations like "Graduation Photos")
+              if (imgCategory.toLowerCase().includes(targetCategory.toLowerCase()) || 
+                  targetCategory.toLowerCase().includes(imgCategory.toLowerCase())) {
+                console.log(`✅ Contains match found: "${imgCategory}" contains "${targetCategory}"`);
+                return true;
+              }
+              
+              return false;
+            });
+            
+            console.log(`🔍 Filtered to ${filteredImages.length} images for category "${currentCategory}"`);
+            if (filteredImages.length > 0) {
+              console.log("🔍 Matched categories:", Array.from(new Set(filteredImages.map(img => img.category))));
+            }
+          }
+          
+          // Sort filtered images based on sortBy preference
+          const sortedImages = [...filteredImages].sort((a, b) => {
             switch (sortBy) {
               case 'newest':
                 return new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime() - 
@@ -135,49 +168,8 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
                        new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime();
             }
           });
-
-          // If filtering by a specific category and no results, try case-insensitive filtering
-          if (currentCategory && currentCategory !== 'all' && sortedImages.length === 0) {
-            console.log("🔍 No exact matches found, trying case-insensitive filtering...");
-            const allImages = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data()
-            })) as Image[];
-            
-            const caseInsensitiveMatches = allImages.filter(img => 
-              img.category.toLowerCase() === currentCategory.toLowerCase() ||
-              img.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
-              currentCategory.toLowerCase().includes(img.category.toLowerCase())
-            );
-            
-            console.log(`🔍 Found ${caseInsensitiveMatches.length} case-insensitive matches for "${currentCategory}"`);
-            console.log("🔍 Matched categories:", Array.from(new Set(caseInsensitiveMatches.map(img => img.category))));
-            
-            if (caseInsensitiveMatches.length > 0) {
-              const sortedCaseInsensitiveImages = [...caseInsensitiveMatches].sort((a, b) => {
-                switch (sortBy) {
-                  case 'newest':
-                    return new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime() - 
-                           new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime();
-                  case 'oldest':
-                    return new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime() - 
-                           new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime();
-                  case 'title':
-                    return (a.title || '').localeCompare(b.title || '');
-                  case 'manual':
-                    return (a.order || 0) - (b.order || 0);
-                  default:
-                    return new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime() - 
-                           new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime();
-                }
-              });
-              setImages(sortedCaseInsensitiveImages);
-            } else {
-              setImages([]);
-            }
-          } else {
-            setImages(sortedImages);
-          }
+          
+          setImages(sortedImages);
           setLoading(false);
         }, (error) => {
           console.error('❌ Error loading images:', error);
