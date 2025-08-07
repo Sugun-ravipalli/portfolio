@@ -77,11 +77,6 @@ const Footer: React.FC = () => {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link to="/upload" className="hover:text-primary-400 transition-colors">
-                  Upload
-                </Link>
-              </li>
             </ul>
           </div>
 
