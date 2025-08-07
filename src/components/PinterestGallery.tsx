@@ -96,6 +96,7 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
         
         if (currentCategory && currentCategory !== 'all') {
           console.log("📂 Filtering by category:", currentCategory);
+          // Try exact match first
           q = query(imagesRef, where('category', '==', currentCategory));
         } else {
           console.log("📂 Loading all categories");
@@ -111,6 +112,10 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
           })) as Image[];
 
           console.log(`✅ Loaded ${loadedImages.length} images for category: ${currentCategory}`);
+          
+          // Debug: Log all unique categories found in the loaded images
+          const uniqueCategories = Array.from(new Set(loadedImages.map(img => img.category)));
+          console.log("🔍 All unique categories in loaded images:", uniqueCategories);
           
           // Sort locally based on sortBy preference
           const sortedImages = [...loadedImages].sort((a, b) => {
@@ -131,7 +136,48 @@ const PinterestGallery: React.FC<PinterestGalleryProps> = ({
             }
           });
 
-          setImages(sortedImages);
+          // If filtering by a specific category and no results, try case-insensitive filtering
+          if (currentCategory && currentCategory !== 'all' && sortedImages.length === 0) {
+            console.log("🔍 No exact matches found, trying case-insensitive filtering...");
+            const allImages = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            })) as Image[];
+            
+            const caseInsensitiveMatches = allImages.filter(img => 
+              img.category.toLowerCase() === currentCategory.toLowerCase() ||
+              img.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
+              currentCategory.toLowerCase().includes(img.category.toLowerCase())
+            );
+            
+            console.log(`🔍 Found ${caseInsensitiveMatches.length} case-insensitive matches for "${currentCategory}"`);
+            console.log("🔍 Matched categories:", Array.from(new Set(caseInsensitiveMatches.map(img => img.category))));
+            
+            if (caseInsensitiveMatches.length > 0) {
+              const sortedCaseInsensitiveImages = [...caseInsensitiveMatches].sort((a, b) => {
+                switch (sortBy) {
+                  case 'newest':
+                    return new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime() - 
+                           new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime();
+                  case 'oldest':
+                    return new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime() - 
+                           new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime();
+                  case 'title':
+                    return (a.title || '').localeCompare(b.title || '');
+                  case 'manual':
+                    return (a.order || 0) - (b.order || 0);
+                  default:
+                    return new Date(b.uploadedAt?.toDate?.() || b.uploadedAt).getTime() - 
+                           new Date(a.uploadedAt?.toDate?.() || a.uploadedAt).getTime();
+                }
+              });
+              setImages(sortedCaseInsensitiveImages);
+            } else {
+              setImages([]);
+            }
+          } else {
+            setImages(sortedImages);
+          }
           setLoading(false);
         }, (error) => {
           console.error('❌ Error loading images:', error);
