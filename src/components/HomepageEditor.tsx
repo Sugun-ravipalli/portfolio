@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../config/firebase-de';
 import { X, Save, Edit3, Eye } from 'lucide-react';
 
 interface HomepageContent {

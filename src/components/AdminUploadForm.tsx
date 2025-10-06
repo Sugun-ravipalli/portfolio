@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { storage, db, auth } from '../config/firebase';
+import { storage, db, auth } from '../config/firebase-de';
 import ImageCropper from './ImageCropper';
 import toast from 'react-hot-toast';
 import { Upload, X, Plus, Trash2, Edit, FolderOpen, Image as ImageIcon, CheckCircle } from 'lucide-react';

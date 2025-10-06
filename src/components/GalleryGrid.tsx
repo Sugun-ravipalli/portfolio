@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs, onSnapshot, writeBatch, doc, updateDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../config/firebase-de';
 import ImageTile from './ImageTile';
 // import SelectionToolbar from './SelectionToolbar';
 // import DeleteConfirmModal from './DeleteConfirmModal';

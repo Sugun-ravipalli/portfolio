@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, orderBy, getDocs, onSnapshot } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../config/firebase-de';
 import ImageCard from './ImageCard';
 import UploadModal from './UploadModal';
 import { Plus, RefreshCw, Eye, Image as ImageIcon } from 'lucide-react';

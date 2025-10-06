@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { auth } from '../config/firebase';
+import { auth } from '../config/firebase-de';
 import PinterestGallery from '../components/PinterestGallery';
 import ImageViewerModal from '../components/ImageViewerModal';
 import CategoryFilter from '../components/CategoryFilter';

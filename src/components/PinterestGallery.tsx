@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../config/firebase-de';
 import { Filter, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 

@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import AdminDashboard from './pages/AdminDashboard';
+import BehindProfile from './pages/BehindProfile';
 
 function App() {
   console.log('App component rendering...');
@@ -22,6 +23,7 @@ function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/behind-profile" element={<BehindProfile />} />
           </Routes>
         </main>
         <Footer />

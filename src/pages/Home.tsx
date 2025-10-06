@@ -1,65 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../config/firebase';
+import { db, auth } from '../config/firebase-de';
 import ImageSlideshow from '../components/ImageSlideshow';
 import HomepageEditor from '../components/HomepageEditor';
-import { Camera, Heart, Users, Calendar, Star, Award, ArrowRight, Play, Instagram, Edit3 } from 'lucide-react';
+import InteractiveMedallionDiagram from '../components/InteractiveMedallionDiagram';
+import { Database, Code, Cloud, Award, ArrowRight, Play, Github, Linkedin, Edit3, GraduationCap, Briefcase, FileText, ExternalLink, Star, Heart, Users, Calendar, Camera, Instagram } from 'lucide-react';
 
 const Home: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [content, setContent] = useState({
-    heroTitle: "Sugunstories",
-    heroSubtitle: "Capturing life's beautiful moments through the lens of creativity and passion. Every story deserves to be told beautifully.",
-    slideshowTitle: "Featured Moments",
-    slideshowSubtitle: "Watch our beautiful collection of captured memories in this stunning slideshow. Each image tells a unique story of joy, love, and celebration.",
-    servicesTitle: "Portfolio Highlights",
-    servicesSubtitle: "Explore my photography work across different categories and styles. Each image represents a unique story and creative vision.",
-    statsTitle: "My Photography Journey",
-    statsSubtitle: "Every number represents a story captured, a moment preserved, and a memory documented.",
-    whyChooseTitle: "About My Photography",
-    whyChooseSubtitle: "Passionate about capturing authentic moments with creative vision",
-    ctaTitle: "Interested in Collaborating?",
-    ctaSubtitle: "I'm always excited to work on creative projects and collaborations. Let's discuss how we can create something amazing together!"
+    heroTitle: "Sai Sugun Ravipalli",
+    heroSubtitle: "Senior Data Engineer | Delivering scalable data solutions that drive business growth and operational excellence across healthcare, technology, and enterprise environments.",
+    slideshowTitle: "Featured Data Engineering Projects",
+    slideshowSubtitle: "Real-world implementations showcasing end-to-end data pipeline development, cloud architecture, and business impact.",
+    servicesTitle: "Core Technical Competencies",
+    servicesSubtitle: "Proven expertise in modern data engineering stack with hands-on experience in production environments.",
+    statsTitle: "Professional Impact",
+    statsSubtitle: "Delivering measurable business value through innovative data engineering solutions and scalable architectures.",
+    whyChooseTitle: "Why Hire Me",
+    whyChooseSubtitle: "Combining deep technical expertise with business acumen to deliver data solutions that drive real results",
+    ctaTitle: "Ready to Discuss Your Data Engineering Needs?",
+    ctaSubtitle: "Let's explore how my expertise in data engineering, cloud platforms, and scalable architectures can contribute to your team's success. I'm excited to discuss opportunities and share how I can add immediate value to your organization."
   });
 
-  const portfolioCategories = [
+  const dataLayers = [
     {
-      icon: Calendar,
-      title: 'Birthday Celebrations',
-      description: 'Capturing the joy and excitement of birthday celebrations through candid moments and beautiful compositions.',
-      features: ['Candid moments', 'Group photos', 'Decor details', 'Cake cutting ceremony'],
-      color: 'from-pink-500 to-red-500'
+      icon: GraduationCap,
+      title: 'Bronze Layer - Education & Foundations',
+      description: 'Academic foundation and core courses that built my data engineering expertise.',
+      features: ['MS Business Analytics - UT Dallas', 'B.Tech Petroleum Engineering - JNTU', 'Database Systems', 'Big Data Analytics', 'Applied Machine Learning'],
+      color: 'from-amber-600 to-orange-600',
+      layer: 'bronze'
     },
     {
-      icon: Heart,
-      title: 'Pre-Wedding Photography',
-      description: 'Beautiful pre-wedding photography that tells love stories through stunning visuals and creative storytelling.',
-      features: ['Engagement shoots', 'Couple portraits', 'Location shoots', 'Storytelling sessions'],
-      color: 'from-purple-500 to-pink-500'
+      icon: Award,
+      title: 'Silver Layer - Certifications & Skills',
+      description: 'Professional certifications and technical skills that validate my expertise.',
+      features: ['SnowPro Core Certified', 'AWS Cloud Practitioner', 'SQL Oracle', 'Python & R', 'Salesforce & Snowflake'],
+      color: 'from-gray-400 to-gray-600',
+      layer: 'silver'
     },
     {
-      icon: Users,
-      title: 'Housewarming Events',
-      description: 'Documenting the special moments of housewarming celebrations and new beginnings in life.',
-      features: ['Home tours', 'Family gatherings', 'House blessings', 'Celebration moments'],
-      color: 'from-green-500 to-blue-500'
+      icon: Briefcase,
+      title: 'Gold Layer - Professional Experience',
+      description: 'Real-world experience building scalable data solutions and leading technical projects.',
+      features: ['Data Engineer - Solomo.io', 'ETL Developer - Tech Mahindra', 'Streamlit RAG Applications', 'Salesforce Pipelines', 'CDC & Reverse ETL'],
+      color: 'from-yellow-500 to-yellow-600',
+      layer: 'gold'
     },
     {
-      icon: Camera,
-      title: 'Event Coverage',
-      description: 'Creative coverage of various events, from corporate gatherings to personal celebrations.',
-      features: ['Corporate events', 'Parties', 'Ceremonies', 'Special occasions'],
-      color: 'from-blue-500 to-indigo-500'
+      icon: Database,
+      title: 'Presentation Layer - Offerings & Solutions',
+      description: 'Comprehensive data engineering services and innovative solutions for modern businesses.',
+      features: ['Salesforce Implementations', 'Snowflake Data Pipelines', 'Streamlit Dashboards', 'Agentic AI Applications', 'Cloud Architecture'],
+      color: 'from-blue-500 to-indigo-600',
+      layer: 'presentation'
     }
   ];
 
   const stats = [
-    { number: '500+', label: 'Photos Captured' },
-    { number: '1000+', label: 'Memories Preserved' },
-    { number: '50+', label: 'Events Documented' },
-    { number: '5+', label: 'Years of Passion' }
+    { number: '5+', label: 'Years Data Engineering Experience' },
+    { number: '50+', label: 'Production Pipelines Deployed' },
+    { number: '10+', label: 'Industry Certifications' },
+    { number: '100%', label: 'Project Success Rate' }
   ];
 
   useEffect(() => {
@@ -95,7 +100,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Hero Section with Slideshow */}
-      <section className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-r from-slate-800 via-blue-900 to-indigo-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Admin Edit Button */}
@@ -114,7 +119,7 @@ const Home: React.FC = () => {
           <div className="text-center mb-12">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <Camera className="h-10 w-10 text-white" />
+                <Database className="h-10 w-10 text-white" />
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent leading-relaxed px-4 py-2">
@@ -126,16 +131,25 @@ const Home: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/gallery"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
+                className="bg-white text-slate-800 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
               >
-                View Gallery
+                View My Work
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
+              <a
+                href="https://www.linkedin.com/in/sai-sugun-ravipalli/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-slate-800 transition-all inline-flex items-center justify-center"
+              >
+                <Linkedin className="mr-2 h-5 w-5" />
+                Connect on LinkedIn
+              </a>
               <Link
                 to="/contact"
-                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all inline-flex items-center justify-center"
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-slate-800 transition-all inline-flex items-center justify-center"
               >
-                Get in Touch
+                Schedule Interview
               </Link>
             </div>
           </div>
@@ -155,18 +169,12 @@ const Home: React.FC = () => {
           </div>
           
           <div className="max-w-6xl mx-auto">
-            <ImageSlideshow 
-              autoPlay={true}
-              interval={4000}
-              showControls={true}
-              showIndicators={false}
-              className="mx-auto"
-            />
+            <ImageSlideshow />
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Interactive Medallion Architecture Section */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -178,32 +186,7 @@ const Home: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {portfolioCategories.map((category, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
-              >
-                <div className={`w-16 h-16 bg-gradient-to-r ${category.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}>
-                  <category.icon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  {category.title}
-                </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  {category.description}
-                </p>
-                <ul className="space-y-3">
-                  {category.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <InteractiveMedallionDiagram />
         </div>
       </section>
 
@@ -234,84 +217,67 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Value Proposition Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
-                {content.whyChooseTitle}
-              </h2>
-              <div className="space-y-8">
-                <div className="flex items-start space-x-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Star className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                      Creative Vision
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      A unique artistic perspective that transforms ordinary moments into extraordinary visual stories.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Award className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                      Authentic Storytelling
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      Years of experience capturing authentic moments with a keen eye for storytelling through photography.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Heart className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                      Passion for Photography
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      Tailored photography packages to meet your specific needs and preferences.
-                    </p>
-                  </div>
-                </div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              What I Bring to Your Team
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Immediate value through proven expertise in modern data engineering practices and production-ready solutions
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                <Cloud className="h-8 w-8 text-white" />
               </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Cloud-First Architecture</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Expert in AWS, Snowflake, and modern cloud platforms with hands-on experience building scalable, cost-effective data solutions.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• AWS Cloud Practitioner Certified</li>
+                <li>• SnowPro Core Certified</li>
+                <li>• Production pipeline deployment</li>
+              </ul>
             </div>
-            <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl">
-                <div className="text-center space-y-6 p-8">
-                  <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto">
-                    <Camera className="h-12 w-12 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-white text-2xl font-bold mb-2">
-                      Professional Photography
-                    </p>
-                    <p className="text-blue-100 text-lg">
-                      Every moment deserves to be captured beautifully
-                    </p>
-                  </div>
-                </div>
+            
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border border-purple-200">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                <Database className="h-8 w-8 text-white" />
               </div>
-              
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                <Play className="h-8 w-8 text-white" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Production-Ready Solutions</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Proven track record of delivering enterprise-grade data pipelines with monitoring, error handling, and scalability built-in.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• Healthcare data pipelines (Cedars-Sinai)</li>
+                <li>• Real-time CDC implementations</li>
+                <li>• Automated deployment pipelines</li>
+              </ul>
+            </div>
+            
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6">
+                <Award className="h-8 w-8 text-white" />
               </div>
-              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                <Heart className="h-6 w-6 text-white" />
-              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Business Impact Focus</h3>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                Strong understanding of business requirements with ability to translate technical solutions into measurable business value.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• Cross-functional collaboration</li>
+                <li>• Stakeholder communication</li>
+                <li>• ROI-driven development</li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-gray-900 to-gray-800 text-white">
@@ -327,28 +293,28 @@ const Home: React.FC = () => {
               to="/contact"
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 inline-flex items-center justify-center"
             >
-              Get in Touch
+              Schedule Interview
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
-            <Link
-              to="/gallery"
+            <a
+              href="https://www.linkedin.com/in/sai-sugun-ravipalli/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="border-2 border-white text-white px-10 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all inline-flex items-center justify-center"
             >
-              View Gallery
-            </Link>
+              <Linkedin className="mr-2 h-5 w-5" />
+              Connect on LinkedIn
+            </a>
+            <a
+              href="https://github.com/Sugun-ravipalli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-white text-white px-10 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all inline-flex items-center justify-center"
+            >
+              <Github className="mr-2 h-5 w-5" />
+              View GitHub
+            </a>
           </div>
-          
-                     {/* Instagram Link */}
-           <div className="mt-12 flex justify-center">
-             <a 
-               href="https://www.instagram.com/sugunstories/" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
-             >
-               <Instagram className="h-6 w-6" />
-             </a>
-           </div>
         </div>
       </section>
 

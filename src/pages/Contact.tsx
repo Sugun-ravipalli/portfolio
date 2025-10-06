@@ -7,14 +7,13 @@ import {
   CheckCircle, 
   Camera, 
   Heart, 
-  Instagram, 
   MessageCircle, 
   Edit3, 
   Save, 
   X, 
   Settings 
 } from 'lucide-react';
-import { auth, db } from '../config/firebase';
+import { auth, db } from '../config/firebase-de';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const Contact: React.FC = () => {
@@ -33,38 +32,54 @@ const Contact: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Editable contact information - Only Instagram for public display
+  // Editable contact information - Professional contacts
   const [contactInfo, setContactInfo] = useState([
     {
-      iconName: 'Instagram',
-      title: 'Instagram',
-      value: '@sugunstories',
-      link: 'https://www.instagram.com/sugunstories/'
+      iconName: 'Mail',
+      title: 'Email',
+      value: 'ravipallisugun@gmail.com',
+      link: 'mailto:ravipallisugun@gmail.com'
+    },
+    {
+      iconName: 'Phone',
+      title: 'Phone',
+      value: '6823905902',
+      link: 'tel:6823905902'
+    },
+    {
+      iconName: 'MapPin',
+      title: 'LinkedIn',
+      value: 'linkedin.com/in/sai-sugun-ravipalli',
+      link: 'https://www.linkedin.com/in/sai-sugun-ravipalli/'
+    },
+    {
+      iconName: 'MapPin',
+      title: 'Location',
+      value: 'Dallas, Texas',
+      link: '#'
     }
   ]);
 
   // Editable availability timings
   const [availabilityTimings, setAvailabilityTimings] = useState({
-    weekdays: '10:00 AM - 8:00 PM',
-    weekends: '9:00 AM - 6:00 PM',
-    events: 'Flexible timing'
+    weekdays: '9:00 AM - 6:00 PM CST',
+    weekends: 'Available for urgent interviews',
+    events: 'Immediate joining available'
   });
 
   const eventTypes = [
-    'Wedding Photography',
-    'Pre-Wedding Shoot',
-    'Engagement Session',
-    'Birthday Celebration',
-    'Family Portrait',
-    'Event Photography',
-    'Other'
+    'Data Engineering Position',
+    'Senior Data Engineer Role',
+    'Cloud Architecture Position',
+    'Technical Interview',
+    'Consulting Opportunity',
+    'Freelance Project',
+    'Other Professional Inquiry'
   ];
 
   // Function to get icon component by name
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
-      case 'Instagram':
-        return Instagram;
       case 'Mail':
         return Mail;
       case 'Phone':
@@ -72,7 +87,7 @@ const Contact: React.FC = () => {
       case 'MapPin':
         return MapPin;
       default:
-        return Instagram;
+        return Mail;
     }
   };
 
@@ -107,7 +122,7 @@ const Contact: React.FC = () => {
         event_type: formData.eventType,
         message: formData.message,
         reply_to: formData.email,
-        to_email: 'sugunstories@gmail.com'
+        to_email: 'ravipallisugun@gmail.com'
       };
 
       console.log('Sending notification email...');
@@ -150,7 +165,7 @@ const Contact: React.FC = () => {
       } else if (error?.message?.includes('public key')) {
         errorMessage += 'Public key might be incorrect.';
       } else {
-        errorMessage += 'Please try again or contact me directly at sugunstories@gmail.com';
+        errorMessage += 'Please try again or contact me directly at ravipallisugun@gmail.com';
       }
       
       alert(errorMessage);
@@ -197,20 +212,38 @@ const Contact: React.FC = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    // Reset to original values - Only Instagram
+    // Reset to original values - Professional contacts
     setContactInfo([
       {
-        iconName: 'Instagram',
-        title: 'Instagram',
-        value: '@sugunstories',
-        link: 'https://www.instagram.com/sugunstories/'
+        iconName: 'Mail',
+        title: 'Email',
+        value: 'ravipallisugun@gmail.com',
+        link: 'mailto:ravipallisugun@gmail.com'
+      },
+      {
+        iconName: 'Phone',
+        title: 'Phone',
+        value: '6823905902',
+        link: 'tel:6823905902'
+      },
+      {
+        iconName: 'MapPin',
+        title: 'LinkedIn',
+        value: 'linkedin.com/in/sai-sugun-ravipalli',
+        link: 'https://www.linkedin.com/in/sai-sugun-ravipalli/'
+      },
+      {
+        iconName: 'MapPin',
+        title: 'Location',
+        value: 'Dallas, Texas',
+        link: '#'
       }
     ]);
     // Reset availability timings to original values
     setAvailabilityTimings({
-      weekdays: '10:00 AM - 8:00 PM',
-      weekends: '9:00 AM - 6:00 PM',
-      events: 'Flexible timing'
+      weekdays: '9:00 AM - 6:00 PM CST',
+      weekends: 'Available for urgent interviews',
+      events: 'Immediate joining available'
     });
   };
 
@@ -234,62 +267,26 @@ const Contact: React.FC = () => {
   useEffect(() => {
     const loadSettings = async () => {
       try {
+        // Clear old data and use new defaults
+        localStorage.removeItem('contactInfo');
+        localStorage.removeItem('availabilityTimings');
+        
         // Try to load from Firebase first
         const settingsRef = doc(db, 'settings', 'contact');
         const settingsDoc = await getDoc(settingsRef);
         
         if (settingsDoc.exists()) {
           const data = settingsDoc.data();
-          if (data.contactInfo) {
+          // Only load if the data is recent (after our changes)
+          if (data.contactInfo && data.contactInfo.length === 4) {
             setContactInfo(data.contactInfo);
           }
           if (data.availabilityTimings) {
             setAvailabilityTimings(data.availabilityTimings);
           }
-        } else {
-          // Fallback to localStorage if no Firebase data
-          const savedContactInfo = localStorage.getItem('contactInfo');
-          if (savedContactInfo) {
-            try {
-              const parsed = JSON.parse(savedContactInfo);
-              setContactInfo(parsed);
-            } catch (error) {
-              console.error('Error loading saved contact info:', error);
-            }
-          }
-
-          const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
-          if (savedAvailabilityTimings) {
-            try {
-              const parsed = JSON.parse(savedAvailabilityTimings);
-              setAvailabilityTimings(parsed);
-            } catch (error) {
-              console.error('Error loading saved availability timings:', error);
-            }
-          }
         }
       } catch (error) {
         console.error('Error loading settings from Firebase:', error);
-        // Fallback to localStorage on error
-        const savedContactInfo = localStorage.getItem('contactInfo');
-        if (savedContactInfo) {
-          try {
-            const parsed = JSON.parse(savedContactInfo);
-            setContactInfo(parsed);
-          } catch (error) {
-            console.error('Error loading saved contact info:', error);
-          }
-        }
-
-        const savedAvailabilityTimings = localStorage.getItem('availabilityTimings');
-        if (savedAvailabilityTimings) {
-          try {
-            const parsed = JSON.parse(savedAvailabilityTimings);
-            setAvailabilityTimings(parsed);
-          } catch (error) {
-            console.error('Error loading saved availability timings:', error);
-          }
-        }
       }
     };
 
@@ -355,200 +352,89 @@ const Contact: React.FC = () => {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Camera className="h-10 w-10 text-white" />
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <MessageCircle className="h-10 w-10 text-white" />
           </div>
-                     <h1 className="text-4xl md:text-5xl font-serif font-bold text-dark-800 mb-4">
-             Let&apos;s Create Magic Together
-           </h1>
-                     <p className="text-lg text-dark-600 max-w-2xl mx-auto">
-             Ready to turn your special moments into timeless stories? I&apos;m here to capture 
-             the love, joy, and beauty in every frame. Let&apos;s make your dreams come true.
-           </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Let&apos;s Discuss Your Data Engineering Needs
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Ready to explore how my expertise in data engineering, cloud platforms, and scalable architectures 
+            can contribute to your team&apos;s success? I&apos;m excited to discuss opportunities and share how I can add immediate value.
+          </p>
           <div className="flex items-center justify-center space-x-4 mt-6">
-            <div className="flex items-center space-x-2 text-primary-600">
-              <Heart className="h-5 w-5" />
-              <span className="font-medium">@sugunstories</span>
-            </div>
-            <div className="w-px h-6 bg-dark-300"></div>
-            <div className="flex items-center space-x-2 text-dark-600">
-              <MessageCircle className="h-5 w-5" />
-              <span>Richardson, Texas</span>
+          <div className="flex items-center space-x-2 text-blue-600">
+            <Mail className="h-5 w-5" />
+            <span className="font-medium">ravipallisugun@gmail.com</span>
+          </div>
+            <div className="w-px h-6 bg-gray-300"></div>
+            <div className="flex items-center space-x-2 text-gray-600">
+              <MapPin className="h-5 w-5" />
+              <span>Dallas, Texas</span>
             </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-600 rounded-lg flex items-center justify-center">
-                <MessageCircle className="h-5 w-5 text-white" />
-              </div>
-              <h2 className="text-2xl font-serif font-bold text-dark-800">
-                Tell Me Your Story
-              </h2>
-            </div>
-
-            {isSubmitted && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <span className="text-green-800">Thank you! Your message has been sent successfully.</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-dark-700 mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-dark-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="Your full name"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-dark-700 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-dark-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="eventType" className="block text-sm font-medium text-dark-700 mb-2">
-                  Event Type
-                </label>
-                <select
-                  id="eventType"
-                  name="eventType"
-                  value={formData.eventType}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-dark-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                >
-                  <option value="">Select an event type</option>
-                  {eventTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-dark-700 mb-2">
-                  Message *
-                </label>
-                                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="w-full px-4 py-3 border border-dark-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                                         placeholder="Share your vision, dreams, and the story you want to tell. What makes your moment special? I&apos;d love to hear about your event details, preferred style, and any specific requirements..."
-                  />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2 shadow-lg"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Creating Magic...</span>
-                  </>
-                ) : (
-                  <>
-                    <Heart className="h-5 w-5" />
-                                         <span>Let&apos;s Start Your Story</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-
+        <div className="max-w-4xl mx-auto">
           {/* Contact Information */}
           <div className="space-y-8">
-            <div>
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Heart className="h-5 w-5 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Mail className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-serif font-bold text-dark-800">
-                  Let&apos;s Connect
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Contact Information
                 </h2>
               </div>
-              <div className="space-y-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                    <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-                      {React.createElement(getIconComponent(info.iconName), { className: "h-6 w-6 text-white" })}
+                  <div key={index} className="text-center p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                      {React.createElement(getIconComponent(info.iconName), { className: "h-8 w-8 text-white" })}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-dark-800 mb-1">
-                        {info.title}
-                      </h3>
-                      {isEditing ? (
-                        <div className="space-y-2">
-                          <input
-                            type="text"
-                            value={info.value}
-                            onChange={(e) => handleContactInfoChange(index, 'value', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                            placeholder={`Enter ${info.title.toLowerCase()}`}
-                          />
-                          <input
-                            type="text"
-                            value={info.link}
-                            onChange={(e) => handleContactInfoChange(index, 'link', e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                            placeholder={`Enter ${info.title.toLowerCase()} link`}
-                          />
-                        </div>
-                      ) : (
-                        <a
-                          href={info.link}
-                          target={info.title === 'Instagram' ? '_blank' : '_self'}
-                          rel={info.title === 'Instagram' ? 'noopener noreferrer' : ''}
-                          className="text-dark-600 hover:text-pink-600 transition-colors font-medium"
-                        >
-                          {info.value}
-                        </a>
-                      )}
-                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      {info.title}
+                    </h3>
+                    {isEditing ? (
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={info.value}
+                          onChange={(e) => handleContactInfoChange(index, 'value', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          placeholder={`Enter ${info.title.toLowerCase()}`}
+                        />
+                        <input
+                          type="text"
+                          value={info.link}
+                          onChange={(e) => handleContactInfoChange(index, 'link', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          placeholder={`Enter ${info.title.toLowerCase()} link`}
+                        />
+                      </div>
+                    ) : (
+                      <a
+                        href={info.link}
+                        target={info.title === 'LinkedIn' ? '_blank' : '_self'}
+                        rel={info.title === 'LinkedIn' ? 'noopener noreferrer' : ''}
+                        className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+                      >
+                        {info.value}
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Business Hours */}
-            <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-6 border border-pink-100">
-              <h3 className="text-xl font-semibold text-dark-800 mb-4 flex items-center space-x-2">
-                <Camera className="h-5 w-5 text-pink-600" />
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center space-x-2">
+                <MessageCircle className="h-5 w-5 text-blue-600" />
                 <span>Availability</span>
               </h3>
-              <div className="space-y-3 text-dark-600">
+              <div className="space-y-3 text-gray-600">
                 <div className="flex justify-between items-center">
                   <span className="font-medium">Weekdays</span>
                   {isEditing ? (
@@ -556,7 +442,7 @@ const Contact: React.FC = () => {
                       type="text"
                       value={availabilityTimings.weekdays}
                       onChange={(e) => handleAvailabilityChange('weekdays', e.target.value)}
-                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., 10:00 AM - 8:00 PM"
                     />
                   ) : (
@@ -570,7 +456,7 @@ const Contact: React.FC = () => {
                       type="text"
                       value={availabilityTimings.weekends}
                       onChange={(e) => handleAvailabilityChange('weekends', e.target.value)}
-                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., 9:00 AM - 6:00 PM"
                     />
                   ) : (
@@ -584,7 +470,7 @@ const Contact: React.FC = () => {
                       type="text"
                       value={availabilityTimings.events}
                       onChange={(e) => handleAvailabilityChange('events', e.target.value)}
-                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      className="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., Flexible timing"
                     />
                   ) : (
@@ -594,17 +480,6 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            {/* Response Time */}
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
-              <h3 className="text-lg font-semibold text-dark-800 mb-3 flex items-center space-x-2">
-                <Heart className="h-5 w-5 text-purple-600" />
-                <span>My Promise to You</span>
-              </h3>
-              <p className="text-dark-600 leading-relaxed">
-                I respond to all inquiries within 12 hours, and I&apos;m always excited to hear about your special moments. 
-                Let&apos;s create something beautiful together! 💕
-              </p>
-            </div>
           </div>
         </div>
       </div>

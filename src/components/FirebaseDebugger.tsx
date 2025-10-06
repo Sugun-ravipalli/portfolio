@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '../config/firebase';
+import { db, auth } from '../config/firebase-de';
 import { Loader2, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
 interface Image {

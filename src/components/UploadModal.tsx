@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
-import { storage, db } from '../config/firebase';
+import { storage, db } from '../config/firebase-de';
 import { X, Upload, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 

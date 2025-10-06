@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
-import { db, storage } from '../config/firebase';
+import { db, storage } from '../config/firebase-de';
 import { Eye, Download, Trash2, Heart, Share2, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Camera, Settings } from 'lucide-react';
-import { auth } from '../config/firebase';
+import { Menu, X, Database, Settings } from 'lucide-react';
+import { auth } from '../config/firebase-de';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Gallery', path: '/gallery' },
+    { name: 'Beyond the Resume', path: '/behind-profile' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -31,9 +31,9 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Camera className="h-8 w-8 text-primary-500" />
-            <span className="text-xl font-serif font-semibold text-dark-800">
-              Sugunstories
+            <Database className="h-8 w-8 text-blue-600" />
+            <span className="text-xl font-bold text-gray-800">
+              Sai Sugun Ravipalli
             </span>
           </Link>
 

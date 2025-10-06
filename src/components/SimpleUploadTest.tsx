@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
-import { storage, db } from '../config/firebase';
+import { storage, db } from '../config/firebase-de';
 import toast from 'react-hot-toast';
 
 const SimpleUploadTest: React.FC = () => {
